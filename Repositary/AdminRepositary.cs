@@ -23,12 +23,14 @@ namespace SchoolManagementSystem.Repositary
             ConnectionString = _configuration.GetConnectionString("SchoolDbContext");
         }
 
+
+        // Class Attendance
         public IEnumerable<ClassAttendance> GetClassAttendanceList()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = connection.Query<ClassAttendance>("sp_GetClassAttendanceList", commandType: CommandType.StoredProcedure);
+                var result = connection.Query<ClassAttendance>("sp_ListAllClassAttendances", commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -43,6 +45,57 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+        public ClassAttendance CreateClassAttendance(ClassAttendance classAttendance)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var result = connection.QueryFirstOrDefault<ClassAttendance>("sp_CreateClassAttendance",
+                    new
+                    {
+                        // Map properties from classAttendance to stored procedure parameters
+                        ClassId = classAttendance.ClassId,
+                        Date = classAttendance.Date,
+                        Present = classAttendance.Present,
+                        Absent = classAttendance.Absent,
+                        TotalStudents = classAttendance.TotalStudents,
+                        UpdatedByStaffId = classAttendance.UpdatedByStaffId,
+                        UpdatedByStaffName = classAttendance.UpdatedByStaffName,
+                        UpdateOnDate = classAttendance.UpdateOnDate
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+        }
+
+        public ClassAttendance EditClassAttendance(ClassAttendance classAttendance)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var result = connection.QueryFirstOrDefault<ClassAttendance>("sp_EditClassAttendance",
+                    new
+                    {
+                        // Map properties from classAttendance to stored procedure parameters
+                        AttendanceId = classAttendance.AttendanceId,
+                        ClassId = classAttendance.ClassId,
+                        Date = classAttendance.Date,
+                        Present = classAttendance.Present,
+                        Absent = classAttendance.Absent,
+                        TotalStudents = classAttendance.TotalStudents,
+                        UpdatedByStaffId = classAttendance.UpdatedByStaffId,
+                        UpdatedByStaffName = classAttendance.UpdatedByStaffName,
+                        UpdateOnDate = classAttendance.UpdateOnDate
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+        }
+
+
+        // Class Teacher
         public ClassTeacher FindClassTeacherByClassTeacherId(int classTeacherId)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -79,7 +132,6 @@ namespace SchoolManagementSystem.Repositary
             {
                 connection.Open();
 
-                // Use Dapper to execute the stored procedure for creating class teacher
                 connection.Execute("sp_CreateClassTeacher",
                     new
                     {
@@ -110,7 +162,6 @@ namespace SchoolManagementSystem.Repositary
             {
                 connection.Open();
 
-                // Use Dapper to execute the stored procedure for editing class teacher
                 connection.Execute("sp_EditClassTeacher",
                     new
                     {
@@ -131,7 +182,6 @@ namespace SchoolManagementSystem.Repositary
             {
                 connection.Open();
 
-                // Use Dapper to execute the stored procedure for deleting class teacher
                 connection.Execute("sp_DeleteClassTeacher",
                     new
                     {
@@ -142,37 +192,15 @@ namespace SchoolManagementSystem.Repositary
         }
 
 
-        IEnumerable<ClassAttendance> IAdminRepositary.GetClassAttendanceList()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        ClassAttendance IAdminRepositary.FindClassAttendanceByClassId(int classId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        ClassTeacher IAdminRepositary.FindClassTeacherByClassTeacherId(int classTeacherId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        ClassTeacher IAdminRepositary.FindClassTeacherByStaffId(int staffId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        IEnumerable<ClassTeacher> IAdminRepositary.FindClassTeacherByClassId(int classId)
-        {
-            throw new System.NotImplementedException();
-        }
+        // Section Attendance
 
         public IEnumerable<SectionAttendance> GetSectionAttendanceList()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = connection.Query<SectionAttendance>("sp_GetSectionAttendanceList", commandType: CommandType.StoredProcedure);
+                var result = connection.Query<SectionAttendance>("sp_ListAllSectionAttendances", commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -187,15 +215,59 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
-        public SectionTeacher FindSectionTeacherBySectionTeacherId(int sectionTeacherId)
+        public SectionAttendance CreateSectionAttendance(SectionAttendance sectionAttendance)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = connection.QueryFirstOrDefault<SectionTeacher>("sp_FindSectionTeacherBySectionTeacherId", new { SectionTeacherId = sectionTeacherId }, commandType: CommandType.StoredProcedure);
+
+                // Use Dapper to execute the stored procedure for creating section attendance
+                var result = connection.QueryFirstOrDefault<SectionAttendance>("sp_CreateSectionAttendance",
+                    new
+                    {
+                        SectionId = sectionAttendance.SectionId,
+                        Date = sectionAttendance.Date,
+                        Present = sectionAttendance.Present,
+                        Absent = sectionAttendance.Absent,
+                        TotalStudents = sectionAttendance.TotalStudents,
+                        UpdatedByStaffId = sectionAttendance.UpdatedByStaffId,
+                        UpdatedByStaffName = sectionAttendance.UpdatedByStaffName,
+                        UpdateOnDate = sectionAttendance.UpdateOnDate
+                    },
+                    commandType: CommandType.StoredProcedure);
+
                 return result;
             }
         }
+
+        public SectionAttendance EditSectionAttendance(SectionAttendance sectionAttendance)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                // Use Dapper to execute the stored procedure for editing section attendance
+                var result = connection.QueryFirstOrDefault<SectionAttendance>("sp_EditSectionAttendance",
+                    new
+                    {
+                        AttendanceId = sectionAttendance.AttendanceId,
+                        SectionId = sectionAttendance.SectionId,
+                        Date = sectionAttendance.Date,
+                        Present = sectionAttendance.Present,
+                        Absent = sectionAttendance.Absent,
+                        TotalStudents = sectionAttendance.TotalStudents,
+                        UpdatedByStaffId = sectionAttendance.UpdatedByStaffId,
+                        UpdatedByStaffName = sectionAttendance.UpdatedByStaffName,
+                        UpdateOnDate = sectionAttendance.UpdateOnDate
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+        }
+
+
+        // Section Teacher
 
         public SectionTeacher FindSectionTeacherByStaffId(int staffId)
         {
@@ -216,6 +288,18 @@ namespace SchoolManagementSystem.Repositary
                 return result;
             }
         }
+
+
+        public SectionTeacher FindSectionTeacherBySectionTeacherId(int sectionTeacherId)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var result = connection.QueryFirstOrDefault<SectionTeacher>("sp_FindSectionTeacherBySectionTeacherId", new { SectionTeacherId = sectionTeacherId }, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
 
         public void CreateSectionTeacher(SectionTeacher sectionTeacher)
         {
@@ -280,12 +364,14 @@ namespace SchoolManagementSystem.Repositary
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+        // Staff Attendance
         public IEnumerable<StaffAttendance> GetStaffAttendanceList()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = connection.Query<StaffAttendance>("sp_GetStaffAttendanceList", commandType: CommandType.StoredProcedure);
+                var result = connection.Query<StaffAttendance>("sp_ListAllStaffAttendances", commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -299,6 +385,9 @@ namespace SchoolManagementSystem.Repositary
                 return result;
             }
         }
+
+
+        // Staff Details
 
         public void CreateStaffDetails(StaffDetails staffDetails)
         {
@@ -332,11 +421,13 @@ namespace SchoolManagementSystem.Repositary
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = connection.Query<StaffDetails>("sp_GetAllStaffDetails", commandType: CommandType.StoredProcedure);
+                var result = connection.Query<StaffDetails>("sp_ListAllStaffDetails", commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
 
+
+        // Subject Teacher
         public StaffDetails FindStaffByStaffId(int staffId)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -437,6 +528,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+        //Staff Salary
         public StaffSalary FindStaffSalaryByStaffId(int staffId)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -446,6 +539,8 @@ namespace SchoolManagementSystem.Repositary
                 return result;
             }
         }
+
+        // Generate Fees
 
         public GenerateFeesForStudent FindGenerateFeesForStudentByClassId(int classId)
         {
@@ -487,6 +582,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+        //Approval of fees
         public ApprovalOfFees FindApprovalOfFeesByStudentId(int studentId)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -537,6 +634,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+        // Class methods
+
         public async Task<int> CreateClass(Class classObj)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -556,12 +655,14 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
-        public async Task<Class> FindClassById(int classId)
+        
+
+        public async Task<Class> FindClassByClassId(int classId)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                connection.Open();
-                var result = await connection.QueryFirstOrDefaultAsync<Class>("sp_FindClassById", new { ClassId = classId }, commandType: CommandType.StoredProcedure);
+                await connection.OpenAsync();
+                var result = await connection.QueryFirstOrDefaultAsync<Class>("sp_FindClassByClassId", new { ClassId = classId }, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -598,15 +699,17 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
-        public async Task<List<Class>> GetAllClasses()
+        public async Task<List<Class>> ListAllClasses()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                connection.Open();
-                var result = await connection.QueryAsync<Class>("sp_GetAllClasses", commandType: CommandType.StoredProcedure);
+                await connection.OpenAsync();
+                var result = await connection.QueryAsync<Class>("sp_ListAllClasses", commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
         }
+
+        // Section methods
 
         public async Task<int> CreateSection(Section section)
         {
@@ -627,22 +730,33 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
-        public async Task<Section> FindSectionById(int sectionId)
+        public async Task<Section> FindSectionBySectionId(int sectionId)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = await connection.QueryFirstOrDefaultAsync<Section>("sp_FindSectionById", new { SectionId = sectionId }, commandType: CommandType.StoredProcedure);
+                var result = await connection.QueryFirstOrDefaultAsync<Section>("sp_FindSectionBySectionId", new { SectionId = sectionId }, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
+
+        public async Task<Section> FindSectionByClassId(int classId)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var result = await connection.QueryFirstOrDefaultAsync<Section>("sp_FindSectionByClassId", new { ClassId = classId }, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
 
         public async Task<bool> UpdateSection(Section section)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync("sp_UpdateSection",
+                var result = await connection.ExecuteAsync("sp_EditSection",
                     new
                     {
                         SectionId = section.SectionId,
@@ -672,11 +786,13 @@ namespace SchoolManagementSystem.Repositary
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Section>("sp_GetAllSections", commandType: CommandType.StoredProcedure);
+                var result = await connection.QueryAsync<Section>("sp_ListAllSections", commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
         }
 
+
+        // StudentDetails methods
         public async Task<int> CreateStudentDetails(StudentDetails studentDetails)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -711,7 +827,7 @@ namespace SchoolManagementSystem.Repositary
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = await connection.QueryFirstOrDefaultAsync<StudentDetails>("sp_FindStudentDetailsById", new { StudentId = studentId }, commandType: CommandType.StoredProcedure);
+                var result = await connection.QueryFirstOrDefaultAsync<StudentDetails>("sp_FindStudentDetailsByStudentId", new { StudentId = studentId }, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -781,7 +897,7 @@ namespace SchoolManagementSystem.Repositary
             using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                var result = await connection.QueryAsync<StudentDetails>("sp_GetAllStudentDetails", commandType: CommandType.StoredProcedure);
+                var result = await connection.QueryAsync<StudentDetails>("sp_ListAllStudentDetails", commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
         }

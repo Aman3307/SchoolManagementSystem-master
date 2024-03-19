@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Interface;
-using SchoolManagementSystem.Models;
 using SchoolManagementSystem.Models.Common;
-using SchoolManagementSystem.Services;
+using SchoolManagementSystem.Repositary;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Controllers
@@ -11,22 +13,25 @@ namespace SchoolManagementSystem.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
+        private readonly JwtService _jwtService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IUserService userService, JwtService jwtService)
         {
-            _authenticationService = authenticationService;
+            _userService = userService;
+            _jwtService = jwtService;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginModel model)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            var token = await _authenticationService.Authenticate(model.Username, model.Password);
-            if (token == null)
-            {
+            var user = await _userService.Authenticate(loginRequest.Username, loginRequest.Password);
+
+            if (user == null)
                 return Unauthorized();
-            }
-            return Ok(new { Token = token });
+
+            var token = _jwtService.GenerateJwtToken(user);
+            return Ok(new { token });
         }
     }
 }

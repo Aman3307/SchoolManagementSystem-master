@@ -3,10 +3,12 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SchoolManagementSystem.Interface;
 using SchoolManagementSystem.Models.Cashier;
+using SchoolManagementSystem.Models.Student;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Repositary
 {
@@ -20,6 +22,7 @@ namespace SchoolManagementSystem.Repositary
             _configuration = configuration;
             ConnectionString = _configuration.GetConnectionString("SchoolDbContext");
         }
+
 
         // Approval of Fees
         public ApprovalOfFees FindApprovalOfFeesByStudentId(int studentId)
@@ -104,7 +107,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return dbConnection.Query<ApprovalOfFees>("sp_GetAllApprovalOfFees", commandType: CommandType.StoredProcedure);
+                return dbConnection.Query<ApprovalOfFees>("sp_ListAllApprovalOfFees", commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -172,7 +175,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return dbConnection.Query<GenerateFeesForStudent>("sp_GetAllGenerateFeesForStudent", commandType: CommandType.StoredProcedure);
+                return dbConnection.Query<GenerateFeesForStudent>("sp_ListAllGenerateFeesForStudents", commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -219,7 +222,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return dbConnection.Query<Revenue>("sp_GetAllRevenue", commandType: CommandType.StoredProcedure);
+                return dbConnection.Query<Revenue>("sp_ListAllRevenues", commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -258,7 +261,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return dbConnection.Query<StaffSalary>("sp_ReadAllStaffSalary", commandType: CommandType.StoredProcedure);
+                return dbConnection.Query<StaffSalary>("sp_ListAllStaffSalaries", commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -267,7 +270,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                dbConnection.Execute("sp_UpdateStaffSalary", staffSalary, commandType: CommandType.StoredProcedure);
+                dbConnection.Execute("sp_EditStaffSalary", staffSalary, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -277,6 +280,57 @@ namespace SchoolManagementSystem.Repositary
             {
                 dbConnection.Open();
                 dbConnection.Execute("sp_DeleteStaffSalary", new { StaffSalaryId = staffSalaryId }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        // Fees update by students methods
+        public async Task<List<FeesUpdateByStudent>> GetAllFeesUpdateByStudent()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                var result = await connection.QueryAsync<FeesUpdateByStudent>("sp_ListAllFeesUpdateByStudents", commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+
+        public async Task<FeesUpdateByStudent> FindFeesUpdateByStudentByStudentId(int studentId)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                var result = await connection.QueryFirstOrDefaultAsync<FeesUpdateByStudent>("sp_FindFeesUpdateByStudentByStudentId", new { StudentId = studentId }, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
+        public async Task<List<FeesUpdateByStudent>> FindFeesUpdateByStudentByClassId(int classId)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                var result = await connection.QueryAsync<FeesUpdateByStudent>("sp_FindFeesUpdateByStudentByClassId", new { ClassId = classId }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+
+        public async Task<List<FeesUpdateByStudent>> FindFeesUpdateByStudentBySectionId(int sectionId)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                var result = await connection.QueryAsync<FeesUpdateByStudent>("sp_FindFeesUpdateByStudentBySectionId", new { SectionId = sectionId }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+        }
+
+        public async Task<List<FeesUpdateByStudent>> FindFeesUpdateByStudentByUTR(string utr)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                var result = await connection.QueryAsync<FeesUpdateByStudent>("sp_FindFeesUpdateByStudentByUTR", new { UTR = utr }, commandType: CommandType.StoredProcedure);
+                return result.ToList();
             }
         }
     }

@@ -23,10 +23,12 @@ namespace SchoolManagementSystem.Interface
         // Class Teacher methods
         Task<ClassTeacher> FindClassTeacherByStaffId(int staffId);
         Task<ClassTeacher> FindClassTeacherByClassId(int classId);
+        IEnumerable<ClassTeacher> ListAllClassTeachers();
 
         // Section Teacher methods
         Task<SectionTeacher> FindSectionTeacherByStaffId(int staffId);
         Task<SectionTeacher> FindSectionTeacherBySectionId(int sectionId);
+        IEnumerable<SectionTeacher> ListAllSectionTeachers();
 
         //Staff Attendance methods
         Task<List<StaffAttendance>> GetAllStaffAttendance();

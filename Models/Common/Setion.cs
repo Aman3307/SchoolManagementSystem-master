@@ -1,6 +1,7 @@
 ﻿using SchoolManagementSystem.Models.Admin;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace SchoolManagementSystem.Models.Common
 {
     public class Section
     {
+        [Key]
         public int SectionId { get; set; }
         public int? ClassId { get; set; }
         public string Class { get; set; }
@@ -17,8 +19,5 @@ namespace SchoolManagementSystem.Models.Common
         public int? UpdatedByStaffId { get; set; }
         public string UpdatedByStaffName { get; set; }
         public DateTime? UpdateOnDate { get; set; }
-
-        // Navigation properties
-        public StaffDetails SectionTeacher { get; set; }
     }
 }

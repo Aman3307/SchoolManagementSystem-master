@@ -13,6 +13,8 @@ namespace SchoolManagementSystem.Interface
         // Class Attendance
         IEnumerable<Models.Admin.ClassAttendance> GetClassAttendanceList();
         ClassAttendance FindClassAttendanceByClassId(int classId);
+        ClassAttendance CreateClassAttendance(ClassAttendance classAttendance);
+        ClassAttendance EditClassAttendance(ClassAttendance classAttendance);
 
         // Class Teacher
         ClassTeacher FindClassTeacherByClassTeacherId(int classTeacherId);
@@ -26,6 +28,8 @@ namespace SchoolManagementSystem.Interface
         // Section Attendance
         IEnumerable<SectionAttendance> GetSectionAttendanceList();
         SectionAttendance FindSectionAttendanceBySectionId(int sectionId);
+        SectionAttendance CreateSectionAttendance(SectionAttendance sectionAttendance);
+        SectionAttendance EditSectionAttendance(SectionAttendance sectionAttendance);
 
         // Section Teacher
         SectionTeacher FindSectionTeacherBySectionTeacherId(int sectionTeacherId);
@@ -56,6 +60,9 @@ namespace SchoolManagementSystem.Interface
         void EditSubjectTeacher(SubjectTeacher subjectTeacher);
         void DeleteSubjectTeacher(int subjectTeacherId);
 
+
+        //Staff Salary
+
         StaffSalary FindStaffSalaryByStaffId(int staffId);
 
         // Generate Fees
@@ -64,6 +71,8 @@ namespace SchoolManagementSystem.Interface
         GenerateFeesForStudent FindGenerateFeesForStudentByStudentId(int studentId);
         GenerateFeesForStudent FindGenerateFeesForStudentByFeesId(int feesId);
 
+
+        //Approval of fees
         ApprovalOfFees FindApprovalOfFeesByStudentId(int studentId);
         IEnumerable<ApprovalOfFees> FindApprovalOfFeesByClassId(int classId);
         IEnumerable<ApprovalOfFees> FindApprovalOfFeesBySectionId(int sectionId);
@@ -72,14 +81,15 @@ namespace SchoolManagementSystem.Interface
 
         // Class methods
         Task<int> CreateClass(Class classObj);
-        Task<Class> FindClassById(int classId);
+        Task<Class> FindClassByClassId(int classId);
         Task<bool> UpdateClass(Class classObj);
         Task<bool> DeleteClass(int classId);
-        Task<List<Class>> GetAllClasses();
+        Task<List<Class>> ListAllClasses();
 
         // Section methods
         Task<int> CreateSection(Section section);
-        Task<Section> FindSectionById(int sectionId);
+        Task<Section> FindSectionBySectionId(int sectionId);
+        Task<Section> FindSectionByClassId(int classId);
         Task<bool> UpdateSection(Section section);
         Task<bool> DeleteSection(int sectionId);
         Task<List<Section>> GetAllSections();

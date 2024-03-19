@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Interface;
-using SchoolManagementSystem.Models;
 using SchoolManagementSystem.Models.Teacher;
-using SchoolManagementSystem.Repositary;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Controllers
 {
-    [Authorize(Roles = "3")]
+    [Authorize(Policy = "TeacherOnly")]
     [Route("api/[controller]")]
     [ApiController]
     public class TeacherController : ControllerBase

@@ -1,4 +1,5 @@
 ﻿using SchoolManagementSystem.Models.Cashier;
+using SchoolManagementSystem.Models.Student;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,13 @@ namespace SchoolManagementSystem.Interface
         IEnumerable<StaffSalary> ReadAllStaffSalary();
         void UpdateStaffSalary(StaffSalary staffSalary);
         void DeleteStaffSalary(int staffSalaryId);
+
+        //fees update by students methods
+        Task<List<FeesUpdateByStudent>> GetAllFeesUpdateByStudent();
+        Task<FeesUpdateByStudent> FindFeesUpdateByStudentByStudentId(int studentId);
+        Task<List<FeesUpdateByStudent>> FindFeesUpdateByStudentByClassId(int classId);
+        Task<List<FeesUpdateByStudent>> FindFeesUpdateByStudentBySectionId(int sectionId);
+        Task<List<FeesUpdateByStudent>> FindFeesUpdateByStudentByUTR(string utr);
     }
 
 }

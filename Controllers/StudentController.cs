@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using SchoolManagementSystem.Interface;
 using SchoolManagementSystem.Models.Student;
 
-[Authorize(Roles = "2")] 
+[Authorize(Policy = "StudentOnly")]
 [ApiController]
-public class StudentComplaintController : ControllerBase
+[Route("api/[controller]")]
+public class StudentController : ControllerBase
 {
     private readonly IStudentRepositary _studentRepositary;
 
-    public StudentComplaintController(IStudentRepositary studentRepositary)
+    public StudentController(IStudentRepositary studentRepositary)
     {
         _studentRepositary = studentRepositary ?? throw new ArgumentNullException(nameof(studentRepositary));
     }
@@ -25,9 +27,8 @@ public class StudentComplaintController : ControllerBase
             var result = await _studentRepositary.CreateComplainByStudent(complain);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
-            // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
         }
     }
@@ -35,6 +36,8 @@ public class StudentComplaintController : ControllerBase
     [HttpPut("EditComplaint/{studentId}")]
     public async Task<IActionResult> EditComplaint(int studentId, [FromBody] ComplainByStudent complain)
     {
+        
+
         try
         {
             var existingComplaint = await _studentRepositary.FindComplainByStudentId(studentId);
@@ -49,7 +52,7 @@ public class StudentComplaintController : ControllerBase
             var result = await _studentRepositary.EditComplainByStudent(existingComplaint);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
             // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
@@ -59,6 +62,7 @@ public class StudentComplaintController : ControllerBase
     [HttpGet("GetComplaint/{studentId}")]
     public async Task<IActionResult> GetComplaint(int studentId)
     {
+        
         try
         {
             var complaint = await _studentRepositary.FindComplainByStudentId(studentId);
@@ -70,7 +74,7 @@ public class StudentComplaintController : ControllerBase
 
             return Ok(complaint);
         }
-        catch (Exception ex)
+        catch
         {
             // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
@@ -92,7 +96,7 @@ public class StudentComplaintController : ControllerBase
             var result = await _studentRepositary.DeleteComplainByStudentId(studentId);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
             // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
@@ -106,7 +110,7 @@ public class StudentComplaintController : ControllerBase
             var result = await _studentRepositary.CreateFeesUpdateByStudent(feesUpdate);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
             // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
@@ -131,7 +135,7 @@ public class StudentComplaintController : ControllerBase
             var result = await _studentRepositary.EditFeesUpdateByStudent(existingFeesUpdate);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
             // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
@@ -153,7 +157,7 @@ public class StudentComplaintController : ControllerBase
             var result = await _studentRepositary.DeleteFeesUpdateByStudentId(studentId);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
             // Log the exception or handle it as needed
             return StatusCode(500, "Internal server error");
@@ -172,9 +176,10 @@ public class StudentComplaintController : ControllerBase
 
             return Ok(marks);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 
@@ -186,9 +191,10 @@ public class StudentComplaintController : ControllerBase
             var hwCwList = await _studentRepositary.FindHwCwBySectionId(sectionId);
             return Ok(hwCwList);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
     [HttpGet("student-attendance/{studentId}")]
@@ -199,9 +205,10 @@ public class StudentComplaintController : ControllerBase
             var attendanceList = await _studentRepositary.FindStudentAttendanceByStudentId(studentId);
             return Ok(attendanceList);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 
@@ -213,9 +220,10 @@ public class StudentComplaintController : ControllerBase
             var achievementList = await _studentRepositary.FindStudentAchievementByStudentId(studentId);
             return Ok(achievementList);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 
@@ -232,9 +240,10 @@ public class StudentComplaintController : ControllerBase
 
             return Ok(remarks);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 
@@ -251,9 +260,10 @@ public class StudentComplaintController : ControllerBase
 
             return Ok(fees);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 
@@ -270,9 +280,10 @@ public class StudentComplaintController : ControllerBase
 
             return Ok(approval);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 
@@ -289,9 +300,10 @@ public class StudentComplaintController : ControllerBase
 
             return Ok(details);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
+            // Log the exception or handle it as needed
+            return StatusCode(500, "Internal server error");
         }
     }
 }

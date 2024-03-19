@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -34,6 +33,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+        // Complain methods
         public async Task<int> CreateComplainByStudent(ComplainByStudent complain)
         {
             using (var dbConnection = DbConnection)
@@ -73,6 +74,9 @@ namespace SchoolManagementSystem.Repositary
                 return result > 0;
             }
         }
+
+
+        // FeesUpdateByStudent methods
 
         public async Task<int> CreateFeesUpdateByStudent(FeesUpdateByStudent feesUpdate)
         {
@@ -115,9 +119,11 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return await dbConnection.QueryFirstOrDefaultAsync<FeesUpdateByStudent>("sp_FindFeesUpdateByStudentByUTRNo", new { UTRNo = utrNo }, commandType: CommandType.StoredProcedure);
+                return await dbConnection.QueryFirstOrDefaultAsync<FeesUpdateByStudent>("sp_FindFeesUpdateByStudentByUTR", new { UTRNo = utrNo }, commandType: CommandType.StoredProcedure);
             }
         }
+
+        // Student Marks methods
 
         public async Task<StudentMarks> FindStudentMarksByStudentId(int studentId)
         {
@@ -129,6 +135,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+        // HwCw methods
+
         public async Task<List<HwCw>> FindHwCwBySectionId(int sectionId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
@@ -138,6 +146,8 @@ namespace SchoolManagementSystem.Repositary
                     commandType: CommandType.StoredProcedure)).ToList();
             }
         }
+
+        // Student Achievement methods
 
         public async Task<StudentAchievement> FindStudentAchievementByStudentId(int studentId)
         {
@@ -149,6 +159,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+        // Student Attendance methods
         public async Task<List<StudentAttendance>> FindStudentAttendanceByStudentId(int studentId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
@@ -159,6 +171,8 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+        // Student Remarks methods
         public async Task<StudentRemarks> FindStudentRemarksByStudentId(int studentId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
@@ -168,6 +182,9 @@ namespace SchoolManagementSystem.Repositary
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+
+        // GenerateFeesForStudent methods
 
         public async Task<GenerateFeesForStudent> FindGenerateFeesForStudentByStudentId(int studentId)
         {
@@ -179,6 +196,9 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+
+        // ApprovalOfFees methods
         public async Task<ApprovalOfFees> FindApprovalOfFeesByStudentId(int studentId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
@@ -188,6 +208,10 @@ namespace SchoolManagementSystem.Repositary
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+
+
+        // StudentDetails methods
 
         public async Task<StudentDetails> FindStudentDetailsByStudentId(int studentId)
         {

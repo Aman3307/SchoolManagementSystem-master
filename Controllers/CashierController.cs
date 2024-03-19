@@ -2,19 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Interface;
 using SchoolManagementSystem.Models.Cashier;
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Controllers
 {
-    [Authorize(Roles = "1")]
+    [Authorize(Policy = "CashierOnly")]
     [ApiController]
     [Route("api/[controller]")]
-    public class CashierManagementController : ControllerBase
+    public class CashierController : ControllerBase
     {
         private readonly ICashierRepositary _cashierRepositary;
 
-        public CashierManagementController(ICashierRepositary cashierRepositary)
+        public CashierController(ICashierRepositary cashierRepositary)
         {
             _cashierRepositary = cashierRepositary;
         }
@@ -246,6 +246,45 @@ namespace SchoolManagementSystem.Controllers
             }
             _cashierRepositary.DeleteStaffSalary(staffSalaryId);
             return NoContent();
+        }
+
+        [HttpGet("fees-update")]
+        public async Task<IActionResult> GetAllFeesUpdateByStudent()
+        {
+            var feesUpdates = await _cashierRepositary.GetAllFeesUpdateByStudent();
+            return Ok(feesUpdates);
+        }
+
+        [HttpGet("fees-update/student/{studentId}")]
+        public async Task<IActionResult> FindFeesUpdateByStudentByStudentId(int studentId)
+        {
+            var feesUpdate = await _cashierRepositary.FindFeesUpdateByStudentByStudentId(studentId);
+            if (feesUpdate == null)
+            {
+                return NotFound();
+            }
+            return Ok(feesUpdate);
+        }
+
+        [HttpGet("fees-update/class/{classId}")]
+        public async Task<IActionResult> FindFeesUpdateByStudentByClassId(int classId)
+        {
+            var feesUpdates = await _cashierRepositary.FindFeesUpdateByStudentByClassId(classId);
+            return Ok(feesUpdates);
+        }
+
+        [HttpGet("fees-update/section/{sectionId}")]
+        public async Task<IActionResult> FindFeesUpdateByStudentBySectionId(int sectionId)
+        {
+            var feesUpdates = await _cashierRepositary.FindFeesUpdateByStudentBySectionId(sectionId);
+            return Ok(feesUpdates);
+        }
+
+        [HttpGet("fees-update/utr/{utr}")]
+        public async Task<IActionResult> FindFeesUpdateByStudentByUTR(string utr)
+        {
+            var feesUpdates = await _cashierRepositary.FindFeesUpdateByStudentByUTR(utr);
+            return Ok(feesUpdates);
         }
 
     }

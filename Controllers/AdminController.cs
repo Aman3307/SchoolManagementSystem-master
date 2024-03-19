@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Interface;
 using SchoolManagementSystem.Models.Admin;
 using SchoolManagementSystem.Models.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Controllers
 {
-    [Authorize(Roles = "4")]
+    [Authorize(Policy = "AdminOnly")]
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
@@ -415,9 +414,9 @@ namespace SchoolManagementSystem.Controllers
         }
 
         [HttpGet("class/{classId}")]
-        public async Task<IActionResult> FindClassById(int classId)
+        public async Task<IActionResult> FindClassByClassId(int classId)
         {
-            var classObj = await _adminRepositary.FindClassById(classId);
+            var classObj = await _adminRepositary.FindClassByClassId(classId);
             if (classObj == null)
             {
                 return NotFound();
@@ -448,9 +447,9 @@ namespace SchoolManagementSystem.Controllers
         }
 
         [HttpGet("classes")]
-        public async Task<IActionResult> GetAllClasses()
+        public async Task<IActionResult> ListAllClasses()
         {
-            var classes = await _adminRepositary.GetAllClasses();
+            var classes = await _adminRepositary.ListAllClasses();
             return Ok(classes);
         }
 
@@ -462,9 +461,9 @@ namespace SchoolManagementSystem.Controllers
         }
 
         [HttpGet("sections/{sectionId}")]
-        public async Task<IActionResult> FindSectionById(int sectionId)
+        public async Task<IActionResult> FindSectionBySectionId(int sectionId)
         {
-            var section = await _adminRepositary.FindSectionById(sectionId);
+            var section = await _adminRepositary.FindSectionBySectionId(sectionId);
             if (section == null)
             {
                 return NotFound();

@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Interface;
-using SchoolManagementSystem.Models;
 using SchoolManagementSystem.Models.Common;
-using SchoolManagementSystem.Repositary;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Controllers
 {
-    [Authorize(Roles = "5")]
+    [Authorize(Policy = "SuperAdminOnly")]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -267,6 +263,7 @@ namespace SchoolManagementSystem.Controllers
         }
 
         [HttpGet("classes")]
+        
         public async Task<ActionResult<List<Class>>> GetAllClasses()
         {
             var classes = await _superAdminRepositary.GetAllClasses();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace SchoolManagementSystem.Models.Cashier
 {
     public class Revenue
     {
+        [Key]
         public int RevenueId { get; set; }
         public decimal RevenueGenerated { get; set; }
         public decimal RevenueReceived { get; set; }

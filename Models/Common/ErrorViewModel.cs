@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace SchoolManagementSystem.Models.Common
 {
-    public class UserRole
+    public class ErrorViewModel
     {
-        public int RoleId { get; set; }
-        public string RoleName { get; set; }
+        public string RequestId { get; set; }
+
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }

@@ -21,6 +21,8 @@ namespace SchoolManagementSystem.Repositary
             ConnectionString = _configuration.GetConnectionString("SchoolDbContext");
         }
 
+
+        // HwCw methods
         public async Task<List<HwCw>> FindHwCwByClassId(int classId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
@@ -60,12 +62,14 @@ namespace SchoolManagementSystem.Repositary
             }
         }
 
+
+        // Student Achievement methods
         public async Task<StudentAchievement> FindStudentAchievementByStudentId(int studentId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return await dbConnection.QueryFirstOrDefaultAsync<StudentAchievement>("sp_GetStudentAchievementByStudentId", new { StudentId = studentId }, commandType: CommandType.StoredProcedure);
+                return await dbConnection.QueryFirstOrDefaultAsync<StudentAchievement>("sp_FindStudentAchievementByStudentId", new { StudentId = studentId }, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -74,7 +78,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return await dbConnection.QueryFirstOrDefaultAsync<StudentAchievement>("sp_GetStudentAchievementByClassId", new { ClassId = classId }, commandType: CommandType.StoredProcedure);
+                return await dbConnection.QueryFirstOrDefaultAsync<StudentAchievement>("sp_FindStudentAchievementByClassId", new { ClassId = classId }, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -83,7 +87,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return await dbConnection.QueryFirstOrDefaultAsync<StudentAchievement>("sp_GetStudentAchievementBySectionId", new { SectionId = sectionId }, commandType: CommandType.StoredProcedure);
+                return await dbConnection.QueryFirstOrDefaultAsync<StudentAchievement>("sp_FindStudentAchievementBySectionId", new { SectionId = sectionId }, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -101,7 +105,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return (await dbConnection.QueryAsync<StudentAchievement>("sp_GetAllStudentAchievements", commandType: CommandType.StoredProcedure)).ToList();
+                return (await dbConnection.QueryAsync<StudentAchievement>("sp_ListAllStudentAchievements", commandType: CommandType.StoredProcedure)).ToList();
             }
         }
 
@@ -114,6 +118,9 @@ namespace SchoolManagementSystem.Repositary
                 return rowsAffected > 0;
             }
         }
+
+
+        // Student Attendance methods
         public async Task<List<StudentAttendance>> FindStudentAttendanceByStudentId(int studentId)
         {
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
@@ -158,7 +165,7 @@ namespace SchoolManagementSystem.Repositary
             using (IDbConnection dbConnection = new SqlConnection(ConnectionString))
             {
                 dbConnection.Open();
-                return (await dbConnection.QueryAsync<StudentAttendance>("sp_GetAllStudentAttendance", commandType: CommandType.StoredProcedure)).ToList();
+                return (await dbConnection.QueryAsync<StudentAttendance>("sp_ListAllStudentAttendances", commandType: CommandType.StoredProcedure)).ToList();
             }
         }
 
@@ -171,6 +178,9 @@ namespace SchoolManagementSystem.Repositary
                 return affectedRows > 0;
             }
         }
+
+
+        // Student Marks methods
         public async Task<StudentMarks> FindStudentMarksByStudentId(int studentId)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -235,7 +245,7 @@ namespace SchoolManagementSystem.Repositary
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var result = await connection.QueryAsync<StudentMarks>("sp_GetAllStudentMarks", commandType: CommandType.StoredProcedure);
+                var result = await connection.QueryAsync<StudentMarks>("sp_ListAllStudentMarks", commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
         }
@@ -263,6 +273,9 @@ namespace SchoolManagementSystem.Repositary
                 return result > 0;
             }
         }
+
+
+        // Student Remarks methods
         public async Task<StudentRemarks> FindStudentRemarksByStudentId(int studentId)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -320,7 +333,7 @@ namespace SchoolManagementSystem.Repositary
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<StudentRemarks>("sp_GetAllStudentRemarks", commandType: CommandType.StoredProcedure);
+                var result = await connection.QueryAsync<StudentRemarks>("sp_ListAllStudentRemarks", commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
         }
